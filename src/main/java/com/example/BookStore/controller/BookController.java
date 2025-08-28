@@ -5,10 +5,19 @@ import com.example.BookStore.entity.MyBookList;
 import com.example.BookStore.service.BookService;
 import com.example.BookStore.service.MyBookListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -24,22 +33,24 @@ public class BookController {
         return "home";
     }
 
-    @GetMapping("/book_register")
-    public String showBookRegister(Model model){
-        model.addAttribute("book", new Book());
-        return "book_register";
-    }
+    @GetMapping("/book_download/{id}")
+    public ResponseEntity<Resource> downloadBook(@PathVariable Long id) throws IOException {
+        Book book = bookService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
 
-    @PostMapping("/book_add")
-    public String addBook(Book book){
-        bookService.save(book);
-        return "redirect:/available_books";
-    }
+        if (book.getFilePath() == null) {
+            throw new RuntimeException("Файл для этой книги не найден");
+        }
 
-    @GetMapping("/available_books")
-    public String getAllBooks(Model model){
-        model.addAttribute("books", bookService.getAllBooks());
-        return "available_books";
+        Path path = Paths.get(book.getFilePath());
+        Resource resource = new UrlResource(path.toUri());
+
+        String contentType = Files.probeContentType(path);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + path.getFileName() + "\"")
+                .body(resource);
     }
 
     @GetMapping("/my_books")
@@ -55,26 +66,6 @@ public class BookController {
         return "redirect:/my_books";
     }
 
-    @GetMapping("/edit_book/{id}")
-    public String edit_book(@PathVariable("id") Long id, Model model){
-        Book book = bookService.getBookById(id);
-        model.addAttribute("book", book);
-        return "edit_book";
-    }
-
-    @PostMapping("/update_book/{id}")
-    public String update_book(@ModelAttribute Book book){
-        bookService.updateBook(book);
-        return "redirect:/available_books";
-    }
-
-    @GetMapping("/delete_book/{id}")
-    public String delete_book(@PathVariable Long id) {
-        bookService.deleteBookById(id);
-        return "redirect:/available_books";
-    }
-
-
     @PostMapping("/save")
     public String addBookInAvailableBooks(@ModelAttribute Book book){
         bookService.save(book);
@@ -88,4 +79,8 @@ public class BookController {
         myBookListService.saveMyBooks(myBookList);
         return "redirect:/my_books";
     }
+
+
+
+
 }

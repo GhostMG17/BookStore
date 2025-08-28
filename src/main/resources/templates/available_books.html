@@ -265,9 +265,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/my_books"><i class="fas fa-bookmark me-1"></i> Мои книги</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/book_register"><i class="fas fa-plus me-1"></i> Добавить</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -298,6 +295,7 @@
                     <th>Автор</th>
                     <th>Цена</th>
                     <th>Год</th>
+                    <th>Ccылки</th>
                     <th>Действия</th>
                 </tr>
                 </thead>
@@ -306,24 +304,17 @@
                     <td th:text="${book.id}"></td>
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
-                    <td>
-                        <span class="price" th:text="${'$' + book.price}"></span>
-                    </td>
+                    <td th:text="${'$' + book.price}"></td>
                     <td th:text="${book.year}"></td>
                     <td>
+                        <a th:href="@{'/book_download/' + ${book.id}}" class="btn btn-sm btn-success">
+                            Скачать
+                        </a>
+                    </td>
+                    <td>
                         <div class="action-buttons">
-                            <a class="btn btn-secondary btn-sm"
-                               th:href="@{/mylist/{id}(id=${book.id})}">
+                            <a class="btn btn-secondary btn-sm" th:href="@{/mylist/{id}(id=${book.id})}">
                                 <i class="fas fa-bookmark me-1"></i> В мои книги
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               th:href="@{/edit_book/{id}(id=${book.id})}">
-                                <i class="fas fa-edit me-1"></i> Редактировать
-                            </a>
-                            <a class="btn btn-danger btn-sm"
-                               th:href="@{/deleteBook/{id}(id=${book.id})}"
-                               onclick="return confirm('Вы уверены, что хотите удалить эту книгу?');">
-                                <i class="fas fa-trash me-1"></i> Удалить
                             </a>
                         </div>
                     </td>

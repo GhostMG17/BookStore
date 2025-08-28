@@ -12,17 +12,27 @@ public class Book {
     private String author;
     private double price;
     private int year;
+    private String filePath;
 
-    public Book(Long id, String title, String author, double price, int year) {
+    public Book(Long id, String title, String author, double price, int year, String filePath) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.price = price;
         this.year = year;
+        this.filePath = filePath;
     }
 
     public Book() {
 
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public Long getId() {

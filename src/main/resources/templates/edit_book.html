@@ -250,7 +250,7 @@
             </div>
 
             <div class="form-container">
-                <form th:action="@{/update_book/{id}(id=${book.id})}" th:object="${book}" method="post">
+                <form th:action="@{/admin/update_book/{id}(id=${book.id})}" th:object="${book}" method="post" enctype="multipart/form-data" >
                     <div class="mb-4">
                         <label for="title" class="form-label">Название книги</label>
                         <input type="text" class="form-control" id="title" th:field="*{title}" required
@@ -273,6 +273,11 @@
                         <label for="year" class="form-label">Год издания</label>
                         <input type="number" class="form-control" id="year" th:field="*{year}" required
                                placeholder="Год" min="1000" max="2025">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="file" class="form-label">Выберите книгу (PDF, EPUB)</label>
+                        <input type="file" class="form-control" id="file" name="file" required>
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
