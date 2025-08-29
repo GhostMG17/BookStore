@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,6 +67,99 @@
 
         .nav-link.active {
             color: var(--accent);
+        }
+
+        .auth-buttons {
+            margin-left: 10px;
+        }
+
+        .auth-buttons .btn {
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons .btn-outline-primary {
+            border: 2px solid var(--dark);
+            color: var(--dark);
+        }
+
+        .auth-buttons .btn-outline-primary:hover {
+            background-color: var(--dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .auth-buttons .btn-primary {
+            background-color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .auth-buttons .btn-primary:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Стили для меню пользователя */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: rgba(236, 240, 241, 0.5);
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .user-menu:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+        }
+
+        .dropdown-menu {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .dropdown-item {
+            border-radius: 5px;
+            padding: 8px 15px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light);
+            color: var(--accent);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .auth-buttons {
+                margin: 10px 0;
+                justify-content: center;
+            }
+
+            .user-menu {
+                margin: 10px 0;
+                justify-content: center;
+            }
         }
 
         .hero-section {
@@ -327,6 +422,7 @@
     </style>
 </head>
 <body>
+
 <!-- Навигация -->
 <nav class="navbar navbar-expand-lg navbar-light sticky-top">
     <div class="container">
@@ -347,13 +443,56 @@
                 <li class="nav-item">
                     <a class="nav-link" href="my_books"><i class="fas fa-bookmark me-1"></i> Мои книги</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="admin/available_books_for_admin">Admin Panel</a>
+
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/admin/available_books_for_admin">
+                        <i class="fas fa-crown me-1"></i> Admin Panel
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <div class="d-flex auth-buttons">
+                        <a class="btn btn-outline-primary btn-sm me-2" th:href="@{/register}">
+                            <i class="fas fa-user-plus me-1"></i> Регистрация
+                        </a>
+                        <a class="btn btn-primary btn-sm" th:href="@{/login}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Войти
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle user-menu" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span sec:authentication="name"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user me-2"></i> Профиль
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="my_books">
+                                <i class="fas fa-bookmark me-2"></i> Мои книги
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="d-inline">
+                                <button type="submit" class="dropdown-item logout-btn">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Выйти
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+
 
 <!-- Герой секция -->
 <section class="hero-section">
