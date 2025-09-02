@@ -2,6 +2,9 @@ package com.example.BookStore.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -38,7 +41,24 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role; // ADMIN или USER
 
-    public User(Long id, String username, String password, Role role,  String firstName, String lastName, String phone, String email) {
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_books",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<MyBookList> myBooks = new HashSet<>();
+
+    public Set<MyBookList> getMyBooks() {
+        return myBooks;
+    }
+
+    public void setMyBooks(Set<MyBookList> myBooks) {
+        this.myBooks = myBooks;
+    }
+
+    public User(Long id, String username, String password, Role role, String firstName, String lastName, String phone, String email) {
         this.id = id;
         this.username = username;
         this.password = password;

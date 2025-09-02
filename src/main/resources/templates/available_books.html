@@ -311,11 +311,18 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a class="btn btn-secondary btn-sm" th:href="@{/mylist/{id}(id=${book.id})}">
+                            <a class="btn btn-secondary btn-sm"
+                               th:if="${myBookTitles != null and !myBookTitles.contains(book.title)}"
+                               th:href="@{/mylist/{id}(id=${book.id})}">
                                 <i class="fas fa-bookmark me-1"></i> В мои книги
                             </a>
+                            <span th:if="${myBookTitles != null and myBookTitles.contains(book.title)}">
+                                Книга добавлена
+                            </span>
                         </div>
                     </td>
+
+
                 </tr>
                 </tbody>
             </table>

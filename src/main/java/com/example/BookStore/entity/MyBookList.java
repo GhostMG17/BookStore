@@ -1,5 +1,6 @@
 package com.example.BookStore.entity;
-
+import java.util.HashSet;
+import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,10 @@ public class MyBookList {
     private String author;
     private Double price;
     private int year;
+
+    @ManyToMany(mappedBy = "myBooks")
+    private Set<User> users = new HashSet<>();
+
 
     public MyBookList(String title, String author, Double price,  int year) {
         this.title = title;

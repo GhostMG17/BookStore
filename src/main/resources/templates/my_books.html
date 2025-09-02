@@ -272,7 +272,6 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Название</th>
                 <th>Автор</th>
                 <th>Год</th>
@@ -282,7 +281,6 @@
             </thead>
             <tbody>
             <tr th:each="book : ${books}">
-                <td th:text="${book.id}"></td>
                 <td th:text="${book.title}"></td>
                 <td th:text="${book.author}"></td>
                 <td th:text="${book.year}"></td>
