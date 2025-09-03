@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+</head>
+<body>
+<h2>Chat with Admin</h2>
+
+<div id="chat" style="border:1px solid #ccc; height:300px; overflow:auto; padding:10px;"></div>
+
+<input type="text" id="messageInput" placeholder="Enter message">
+<button onclick="sendMessage()">Send</button>
+
+<script th:inline="javascript">
+    var currentUserId = /*[[${currentUser.id}]]*/ 2; // текущий пользователь
+    var adminId = 1;
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+
+            // Подписка на ответы админа
+            stompClient.subscribe('/topic/private-' + currentUserId, function(messageOutput) {
+                var msg = JSON.parse(messageOutput.body);
+                var chatDiv = document.getElementById("chat");
+                chatDiv.innerHTML += "<p><b>" + msg.senderUsername + ":</b> " + msg.content + "</p>";
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            });
+        });
+    }
+
+    function sendMessage() {
+        var content = document.getElementById("messageInput").value.trim();
+        if (!content || !stompClient) return;
+
+        // Показываем своё сообщение сразу
+        var chatDiv = document.getElementById("chat");
+        chatDiv.innerHTML += "<p><b>You:</b> " + content + "</p>";
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+
+        stompClient.send("/app/private-message", {}, JSON.stringify({
+            senderId: currentUserId,
+            receiverId: adminId,
+            content: content
+        }));
+
+        document.getElementById("messageInput").value = '';
+    }
+
+    connect();
+</script>
+</body>
+</html>

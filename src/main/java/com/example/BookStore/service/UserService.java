@@ -38,9 +38,11 @@ public class UserService {
         return userRepository.existsByPhone(phone);
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
+
 
     public Optional<User> findByEmail(String email) {
         return Optional.ofNullable(userRepository.findByEmail(email));
@@ -83,5 +85,9 @@ public class UserService {
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }
+
+
+
+
 
 }
