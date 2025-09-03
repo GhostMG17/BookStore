@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEW BOOK STORE | Редактирование профиля</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #95a5a6;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin: 15px auto 0;
+        }
+
+        .btn-primary {
+            background-color: var(--dark);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--dark);
+            color: var(--dark);
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin: 2rem auto;
+            border-top: 4px solid var(--accent);
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .form-control {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.1);
+            border-color: var(--dark);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-title {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+
+        .social-icon {
+            font-size: 1.2rem;
+            color: white;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+
+        .social-icon:hover {
+            color: var(--accent);
+        }
+
+        .footer-link {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            color: #bdc3c7;
+        }
+
+        .profile-info {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin-bottom: 15px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .avatar-preview i {
+            font-size: 60px;
+            color: #ccc;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-upload-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .avatar-upload-label:hover {
+            background-color: var(--accent);
+        }
+
+        #avatar {
+            display: none;
+        }
+
+        .avatar-note {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-book me-2"></i>NEW BOOK STORE
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/catalog"><i class="fas fa-book me-1"></i> Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/profile"><i class="fas fa-user me-1"></i> Профиль</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="section-title">Редактирование профиля</h1>
+
+            <div class="profile-info">
+                <h5><i class="fas fa-user me-2"></i>Редактирование профиля пользователя: <span th:text="${user.username}"></span></h5>
+                <p class="mb-0">Обновите вашу личную информацию и настройки аккаунта</p>
+            </div>
+
+            <div class="form-container">
+                <form th:action="@{/profile/update_profile/{id}(id=${user.id})}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" th:value="${user.id}">
+
+                    <div class="avatar-container">
+                        <div class="avatar-preview" id="avatarPreview">
+                            <i class="fas fa-user"></i>
+                            <!-- Здесь будет предпросмотр аватара -->
+                        </div>
+
+                        <label for="avatar" class="avatar-upload-label">
+                            <i class="fas fa-upload me-2"></i> Выбрать изображение
+                        </label>
+                        <input type="file" id="avatar" name="avatarFile" accept="image/*">
+                        <p class="avatar-note">
+                            <i class="fas fa-info-circle me-1"></i> JPG, PNG или GIF. Макс. размер 5 МБ.
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="username" class="form-label">Имя пользователя</label>
+                            <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" required
+                                   placeholder="Введите имя пользователя">
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" th:value="${user.email}" required
+                                   placeholder="Введите email">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="firstName" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" th:value="${user.firstName}" required
+                                   placeholder="Введите ваше имя">
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="lastName" class="form-label">Фамилия</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" th:value="${user.lastName}" required
+                                   placeholder="Введите вашу фамилию">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="phone" class="form-label">Телефон</label>
+                        <input type="text" class="form-control" id="phone" name="phone" th:value="${user.phone}"
+                               placeholder="Введите номер телефона">
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i> Сохранить изменения
+                        </button>
+                        <a href="/profile" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i> Вернуться в профиль
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Футер -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h4 class="footer-title">NEW BOOK STORE</h4>
+                <p>Мы предлагаем лучший выбор литературы для ценителей качественного чтения</p>
+                <div class="mt-3">
+                    <a href="#" class="social-icon"><i class="fab fa-vk"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h4 class="footer-title">Контакты</h4>
+                <p><i class="fas fa-map-marker-alt me-2"></i> г. Москва, ул. Книжная, 15</p>
+                <p><i class="fas fa-phone me-2"></i> +7 (495) 123-45-67</p>
+                <p><i class="fas fa-envelope me-2"></i> info@bookstore.ru</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h4 class="footer-title">Часы работы</h4>
+                <p>Пн-Пт: 9:00 - 21:00</p>
+                <p>Сб-Вс: 10:00 - 20:00</p>
+            </div>
+        </div>
+        <div class="text-center copyright">
+            <p>&copy; 2025 NEW BOOK STORE. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Предпросмотр аватара
+    document.getElementById('avatar').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('avatarPreview');
+                preview.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Валидация формы
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        const requiredFields = form.querySelectorAll('[required]');
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+                field.style.borderColor = '#e74c3c';
+            } else {
+                field.style.borderColor = '#ddd';
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+            alert('Пожалуйста, заполните все обязательные поля.');
+        }
+    });
+</script>
+</body>
+</html>

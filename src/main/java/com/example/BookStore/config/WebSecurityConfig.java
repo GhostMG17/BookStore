@@ -69,7 +69,4 @@ public class WebSecurityConfig {
                 .authenticationProvider(daoAuthenticationProvider())
                 .build();
     }
-
-
-
 }

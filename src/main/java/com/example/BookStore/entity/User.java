@@ -38,6 +38,9 @@ public class User {
     @Pattern(regexp = "^[0-9\\-+]{9,15}$", message = "Invalid phone number")
     private String phone;
 
+    @Column(name = "avatar")
+    private String avatar;
+
     @Enumerated(EnumType.STRING)
     private Role role; // ADMIN или USER
 
@@ -58,7 +61,7 @@ public class User {
         this.myBooks = myBooks;
     }
 
-    public User(Long id, String username, String password, Role role, String firstName, String lastName, String phone, String email) {
+    public User(Long id, String username, String password, Role role, String firstName, String lastName, String phone,String avatar ,String email) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -66,7 +69,16 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
+        this.avatar = avatar;
         this.email = email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public User() {

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEW BOOK STORE | Личный кабинет</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #95a5a6;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+
+        .auth-buttons {
+            margin-left: 10px;
+        }
+
+        .auth-buttons .btn {
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons .btn-outline-primary {
+            border: 2px solid var(--dark);
+            color: var(--dark);
+        }
+
+        .auth-buttons .btn-outline-primary:hover {
+            background-color: var(--dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .auth-buttons .btn-primary {
+            background-color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .auth-buttons .btn-primary:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Стили для меню пользователя */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: rgba(236, 240, 241, 0.5);
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .user-menu:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+        }
+
+        .dropdown-menu {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .dropdown-item {
+            border-radius: 5px;
+            padding: 8px 15px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light);
+            color: var(--accent);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .auth-buttons {
+                margin: 10px 0;
+                justify-content: center;
+            }
+
+            .user-menu {
+                margin: 10px 0;
+                justify-content: center;
+            }
+        }
+
+        /* Стили для профиля */
+        .profile-section {
+            padding: 3rem 0;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            padding: 30px;
+            color: white;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            background: linear-gradient(45deg, var(--accent), #f39c12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .change-avatar-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .change-avatar-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .profile-body {
+            padding: 30px;
+        }
+
+        .info-group {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 18px;
+            color: var(--dark);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            padding: 0 15px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--secondary);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-profile {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-profile-primary {
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+
+        .btn-profile-primary:hover {
+            background: #1a252f;
+            border-color: #1a252f;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-profile-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-profile-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .recent-activity {
+            margin-top: 40px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            font-size: 14px;
+            color: var(--secondary);
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-bottom: 15px;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-title {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+
+        .social-icon {
+            font-size: 1.2rem;
+            color: white;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+
+        .social-icon:hover {
+            color: var(--accent);
+        }
+
+        .footer-link {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            color: #bdc3c7;
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .profile-header {
+                text-align: center;
+            }
+
+            .change-avatar-btn {
+                position: relative;
+                bottom: unset;
+                right: unset;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-book me-2"></i>NEW BOOK STORE
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="available_books"><i class="fas fa-book me-1"></i> Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="my_books"><i class="fas fa-bookmark me-1"></i> Мои книги</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/admin/dashboard">
+                        <i class="fas fa-crown me-1"></i> Admin Panel
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <div class="d-flex auth-buttons">
+                        <a class="btn btn-outline-primary btn-sm me-2" th:href="@{/register}">
+                            <i class="fas fa-user-plus me-1"></i> Регистрация
+                        </a>
+                        <a class="btn btn-primary btn-sm" th:href="@{/login}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Войти
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle user-menu" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span sec:authentication="name"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user me-2"></i> Профиль
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="my_books">
+                                <i class="fas fa-bookmark me-2"></i> Мои книги
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="d-inline">
+                                <button type="submit" class="dropdown-item logout-btn">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Выйти
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Профиль -->
+<section class="profile-section">
+    <div class="container">
+        <h1 class="section-title">Личный кабинет</h1>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div th:if="${user.avatar != null}">
+                            <img th:src="@{${user.avatar}}" alt="Аватар" class="profile-avatar">
+                        </div>
+                        <div th:if="${user.avatar == null}" class="avatar-placeholder">
+                            <span th:text="${user.firstName.substring(0, 1) + user.lastName.substring(0, 1)}"></span>
+                        </div>
+                        <h3 th:text="${user.firstName + ' ' + user.lastName}"></h3>
+                        <p>@<span th:text="${user.username}"></span></p>
+                        <button class="change-avatar-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+
+                    <div class="profile-body">
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Книг</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Заказов</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Отзывов</div>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button onclick="window.location.href='/profile/edit'" class="btn btn-profile btn-profile-primary">
+                                <i class="fas fa-edit"></i> Редактировать
+                            </button>
+                            <button onclick="window.location.href='/profile/change_password'" class="btn btn-profile btn-profile-outline">
+                                <i class="fas fa-lock"></i> Пароль
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="profile-card">
+                    <div class="profile-body">
+                        <h3 class="section-title">Личная информация</h3>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-group">
+                                    <div class="info-label">Имя пользователя</div>
+                                    <div class="info-value">@<span th:text="${user.username}"></span></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-group">
+                                    <div class="info-label">Email</div>
+                                    <div class="info-value"><span th:text="${user.email}"></span></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-group">
+                                    <div class="info-label">Имя</div>
+                                    <div class="info-value"><span th:text="${user.firstName}"></span></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-group">
+                                    <div class="info-label">Фамилия</div>
+                                    <div class="info-value"><span th:text="${user.lastName}"></span></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-group">
+                                    <div class="info-label">Телефон</div>
+                                    <div class="info-value"><span th:text="${user.phone}"></span></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-group">
+                                    <div class="info-label">Дата регистрации</div>
+                                    <div class="info-value">15 марта 2023</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3 class="section-title">Последняя активность</h3>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Вы начали читать "Мастер и Маргарита"</div>
+                            <div class="activity-time">Сегодня в 14:30</div>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Оформлен новый заказ #3245</div>
+                            <div class="activity-time">Вчера в 09:45</div>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Оставлен отзыв к книге "1984"</div>
+                            <div class="activity-time">5 сентября 2023</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h4 class="footer-title">NEW BOOK STORE</h4>
+                <p>Мы предлагаем лучший выбор литературы для ценителей качественного чтения</p>
+                <div class="mt-3">
+                    <a href="#" class="social-icon"><i class="fab fa-vk"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h4 class="footer-title">Контакты</h4>
+                <p><i class="fas fa-map-marker-alt me-2"></i> г. Ташкент, ул. Книжная, 15</p>
+                <p><i class="fas fa-phone me-2"></i> +998900990099</p>
+                <p><i class="fas fa-envelope me-2"></i> info@bookstore.uz</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h4 class="footer-title">Часы работы</h4>
+                <p>Пн-Пт: 9:00 - 21:00</p>
+                <p>Сб-Вс: 10:00 - 20:00</p>
+            </div>
+        </div>
+        <div class="text-center copyright">
+            <p>&copy; 2025 NEW BOOK STORE. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Функция для смены аватара
+    document.querySelector('.change-avatar-btn').addEventListener('click', function() {
+        alert('Функция смены аватара будет реализована здесь');
+    });
+</script>
+</body>
+</html>

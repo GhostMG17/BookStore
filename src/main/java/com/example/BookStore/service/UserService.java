@@ -75,4 +75,13 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public String getCurrentPassword(User user){
+        return user.getPassword();
+    }
+
+    public void updatePassword(User user, String encodedPassword) {
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+    }
+
 }
