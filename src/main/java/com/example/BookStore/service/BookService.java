@@ -3,6 +3,7 @@ package com.example.BookStore.service;
 import com.example.BookStore.entity.Book;
 import com.example.BookStore.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,5 +38,15 @@ public class BookService {
     public Optional<Book> findById(Long id) {
         return bookRepository.findById(id);
     }
+
+    public long countBooks() {
+        return bookRepository.countBooks();
+    }
+
+    public List<Book> findRecentBooks() {
+        return bookRepository.findRecentBooks(PageRequest.of(0, 5));
+    }
+
+
 
 }

@@ -28,6 +28,7 @@
             font-weight: 700;
         }
 
+        /* Навбар */
         .navbar {
             background-color: rgba(255, 255, 255, 0.95);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -67,30 +68,13 @@
             color: var(--accent);
         }
 
-        .section-title {
-            position: relative;
-            margin-bottom: 2.5rem;
-            text-align: center;
-            padding-bottom: 15px;
-        }
-
-        .section-title:after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: var(--accent);
-            margin: 15px auto 0;
-        }
-
         .btn-primary {
             background-color: var(--dark);
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 30px;
             font-weight: 600;
             transition: all 0.3s;
-            letter-spacing: 0.5px;
         }
 
         .btn-primary:hover {
@@ -99,129 +83,98 @@
             box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
         }
 
-        .btn-secondary {
-            background-color: var(--secondary);
-            border: none;
-            padding: 8px 16px;
+        .btn-outline-primary {
+            border: 2px solid var(--dark);
+            color: var(--dark);
+            padding: 8px 18px;
             border-radius: 30px;
             font-weight: 600;
             transition: all 0.3s;
         }
 
-        .btn-secondary:hover {
-            background-color: #7f8c8d;
+        .btn-outline-primary:hover {
+            background-color: var(--dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 0.875rem;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
             transform: translateY(-2px);
         }
 
         .btn-danger {
             background-color: var(--accent);
             border: none;
-            padding: 8px 16px;
             border-radius: 30px;
-            font-weight: 600;
+            padding: 6px 15px;
             transition: all 0.3s;
         }
 
         .btn-danger:hover {
             background-color: #c0392b;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
         }
 
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            background: white;
-        }
-
-        .table thead {
-            background-color: var(--dark);
-            color: white;
-        }
-
-        .table th {
-            font-weight: 600;
-            padding: 1rem;
-        }
-
-        .table td {
-            padding: 1rem;
-            vertical-align: middle;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: rgba(44, 62, 80, 0.05);
-        }
-
-        .price {
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 3rem 0 1.5rem;
-            margin-top: 4rem;
-        }
-
-        .footer-title {
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 1.5rem;
+        /* Заголовки разделов */
+        .section-title {
             position: relative;
+            margin-bottom: 1.5rem;
             padding-bottom: 10px;
         }
 
-        .footer-title:after {
+        .section-title:after {
             content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 40px;
-            height: 2px;
-            background-color: var(--accent);
-        }
-
-        .social-icon {
-            font-size: 1.2rem;
-            color: white;
-            margin-right: 15px;
-            transition: color 0.3s;
-        }
-
-        .social-icon:hover {
-            color: var(--accent);
-        }
-
-        .footer-link {
-            color: #ecf0f1;
-            text-decoration: none;
-            transition: color 0.3s;
             display: block;
-            margin-bottom: 8px;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin-top: 10px;
         }
 
-        .footer-link:hover {
-            color: var(--accent);
+        /* Таблица */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
         }
 
-        .copyright {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1.5rem;
-            margin-top: 2rem;
-            color: #bdc3c7;
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--accent);
+            padding: 1rem 0.75rem;
         }
 
+        .table td {
+            vertical-align: middle;
+            padding: 1rem 0.75rem;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(236, 240, 241, 0.5);
+        }
+
+        /* Состояние пустого каталога */
         .empty-state {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 2rem;
             background: white;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -233,6 +186,33 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Действия */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Фильтры и поиск */
+        .filters-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 30px;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.1);
+            border-color: var(--dark);
+        }
+
+        /* Адаптивность */
         @media (max-width: 768px) {
             .action-buttons {
                 flex-direction: column;
@@ -245,10 +225,11 @@
     </style>
 </head>
 <body>
+
 <!-- Навигация -->
 <nav class="navbar navbar-expand-lg navbar-light sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="/admin/dashboard">
             <i class="fas fa-book me-2"></i>NEW BOOK STORE
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -257,11 +238,11 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="book_register"><i class="fas fa-plus me-1"></i> Добавить Книгу </a>
+                    <a class="nav-link" href="/admin/book_register"><i class="fas fa-plus me-1"></i> Добавить Книгу </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Назад в главную</a>
+                    <a class="nav-link" href="/admin/dashboard"><i class="fas fa-home me-1"></i> Назад в главную</a>
                 </li>
             </ul>
         </div>
@@ -272,10 +253,37 @@
 <div class="container mt-4">
     <h1 class="section-title">Каталог книг</h1>
 
+    <!-- Фильтры и поиск -->
+    <div class="filters-section">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" placeholder="Поиск по названию или автору...">
+            </div>
+            <div class="col-md-3 mb-3">
+                <select class="form-control">
+                    <option value="">Все категории</option>
+                    <option value="fiction">Художественная литература</option>
+                    <option value="science">Наука и техника</option>
+                    <option value="history">История</option>
+                    <option value="biography">Биографии</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <select class="form-control">
+                    <option value="">Сортировка</option>
+                    <option value="newest">Сначала новые</option>
+                    <option value="oldest">Сначала старые</option>
+                    <option value="price_asc">Цена по возрастанию</option>
+                    <option value="price_desc">Цена по убыванию</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div th:if="${books.empty}">
         <div class="empty-state">
             <div class="empty-state-icon">
-                <i class="fas fa-book"></i>
+                <i class="fas fa-book-open"></i>
             </div>
             <h3>В каталоге пока нет книг</h3>
             <p class="mb-4">Добавьте первую книгу, нажав на кнопку ниже</p>
@@ -284,49 +292,92 @@
     </div>
 
     <div th:unless="${books.empty}">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Название</th>
-                    <th>Автор</th>
-                    <th>Цена</th>
-                    <th>Год</th>
-                    <th>Ccылки</th>
-                    <th>Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="book : ${books}">
-                    <td th:text="${book.id}"></td>
-                    <td th:text="${book.title}"></td>
-                    <td th:text="${book.author}"></td>
-                    <td th:text="${'$' + book.price}"></td>
-                    <td th:text="${book.year}"></td>
-                    <td>
-                        <a th:href="@{'/book_download/' + ${book.id}}" class="btn btn-sm btn-success">
-                            Скачать
-                        </a>
-                    </td>
-                    <td>
-                        <div class="action-buttons">
-                            <a class="btn btn-primary btn-sm" th:href="@{/admin/edit_book/{id}(id=${book.id})}">
-                                <i class="fas fa-edit me-1"></i> Редактировать
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="mb-0">Найдено книг: <span th:text="${books.size()}"></span></p>
+            <div>
+                <button class="btn btn-outline-primary btn-sm me-2"><i class="fas fa-file-export me-1"></i> Экспорт</button>
+                <a href="book_register" class="btn btn-primary btn-sm"><i class="fas fa-plus me-1"></i> Добавить книгу</a>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Цена</th>
+                        <th>Год</th>
+                        <th>Ссылки</th>
+                        <th>Действия</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="book : ${books}">
+                        <td th:text="${book.id}"></td>
+                        <td th:text="${book.title}"></td>
+                        <td th:text="${book.author}"></td>
+                        <td th:text="${'$' + book.price}"></td>
+                        <td th:text="${book.year}"></td>
+                        <td>
+                            <a th:href="@{'/book_download/' + ${book.id}}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download me-1"></i> Скачать
                             </a>
-                            <a class="btn btn-danger btn-sm" th:href="@{/admin/delete_book/{id}(id=${book.id})}"
-                               onclick="return confirm('Вы уверены, что хотите удалить эту книгу?');">
-                                <i class="fas fa-trash me-1"></i> Удалить
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a class="btn btn-primary btn-sm" th:href="@{/admin/edit_book/{id}(id=${book.id})}">
+                                    <i class="fas fa-edit me-1"></i> Редакт.
+                                </a>
+                                <a class="btn btn-danger btn-sm" th:href="@{/admin/delete_book/{id}(id=${book.id})}"
+                                   onclick="return confirm('Вы уверены, что хотите удалить эту книгу?');">
+                                    <i class="fas fa-trash me-1"></i> Удалить
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Пагинация -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Предыдущая</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Следующая</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Функция для подтверждения удаления
+    function confirmDelete() {
+        return confirm('Вы уверены, что хотите удалить эту книгу?');
+    }
+
+    // Добавляем обработчики событий для кнопок удаления
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.btn-danger');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!confirmDelete()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

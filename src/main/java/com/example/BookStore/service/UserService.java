@@ -1,11 +1,13 @@
 package com.example.BookStore.service;
 
+import com.example.BookStore.entity.Book;
 import com.example.BookStore.entity.User;
 import com.example.BookStore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,9 +46,33 @@ public class UserService {
         return Optional.ofNullable(userRepository.findByEmail(email));
     }
 
-
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    public long countUsers() {
+        return userRepository.countUsers();
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public User findById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.orElse(null); // возвращаем null, если пользователь не найден
+    }
+
+    public User getById(Long id){
+        return userRepository.findById(id).get();
+    }
+
+    public void updateUser(User user){
+        userRepository.save(user);
     }
 
 }

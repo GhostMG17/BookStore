@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEW BOOK STORE | Управление пользователями</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #95a5a6;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Навбар */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+
+        .btn-primary {
+            background-color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--dark);
+            color: var(--dark);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 0.875rem;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--accent);
+            border: none;
+            border-radius: 30px;
+            padding: 6px 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        /* Заголовки разделов */
+        .section-title {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin-top: 10px;
+        }
+
+        /* Таблица */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--accent);
+            padding: 1rem 0.75rem;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 1rem 0.75rem;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(236, 240, 241, 0.5);
+        }
+
+        /* Бейджи статусов */
+        .badge-status {
+            padding: 0.4em 0.8em;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .badge-user {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Состояние пустого списка */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Действия */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: all 0.3s;
+        }
+
+        .btn-action i {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Кнопки с иконками */
+        .btn-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 0;
+        }
+
+        .btn-icon i {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        /* Анимация нажатия */
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Небольшая адаптивность */
+        @media (max-width: 600px) {
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+        /* Фильтры и поиск */
+        .filters-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 30px;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.1);
+            border-color: var(--dark);
+        }
+
+        /* Модальное окно */
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/admin/dashboard">
+            <i class="fas fa-book me-2"></i>NEW BOOK STORE
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/available_books_for_admin"><i class="fas fa-book me-1"></i> Управление книгами</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/dashboard"><i class="fas fa-home me-1"></i> На главную</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<div class="container mt-4">
+    <h1 class="section-title">Управление пользователями</h1>
+    <!-- Фильтры и поиск -->
+    <div class="filters-section">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" placeholder="Поиск по имени, email или username...">
+            </div>
+            <div class="col-md-3 mb-3">
+                <select class="form-control">
+                    <option value="">Все роли</option>
+                    <option value="ADMIN">Администраторы</option>
+                    <option value="USER">Пользователи</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <button class="btn btn-primary w-100"><i class="fas fa-filter me-1"></i> Применить фильтры</button>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${users.empty}">
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3>Пользователи не найдены</h3>
+            <p class="mb-4">В системе пока нет зарегистрированных пользователей</p>
+        </div>
+    </div>
+
+    <div th:unless="${users.empty}">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="mb-0">Найдено пользователей: <span th:text="${users.size()}"></span></p>
+            <div>
+                <button class="btn btn-outline-primary btn-sm me-2"><i class="fas fa-file-export me-1"></i> Экспорт</button>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                    <i class="fas fa-user-plus me-1"></i> Добавить пользователя
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Имя пользователя</th>
+                        <th>Имя и Фамилия</th>
+                        <th>Email</th>
+                        <th>Телефон</th>
+                        <th>Роль</th>
+                        <th>Кол-во книг</th>
+                        <th>Действия</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td>
+                            <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
+                        </td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phone}"></td>
+                        <td>
+                            <span th:if="${user.role.name() == 'ADMIN'}" class="badge badge-status badge-admin">Администратор</span>
+                            <span th:unless="${user.role.name() == 'ADMIN'}" class="badge badge-status badge-user">Пользователь</span>
+                        </td>
+                        <td th:text="${user.myBooks.size()}"></td>
+                        <td>
+                            <div class="action-buttons">
+                                <!-- Кнопка просмотра -->
+                                <button class="btn btn-info"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#viewUserModal"
+                                        th:data-bs-userid="${user.id}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
+                                <!-- Кнопка редактирования -->
+                                <button class="btn btn-warning btn-action"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editUserModal"
+                                        th:data-bs-userid="${user.id}"
+                                        th:data-bs-username="${user.username}"
+                                        th:data-bs-firstname="${user.firstName}"
+                                        th:data-bs-lastname="${user.lastName}"
+                                        title="Редактировать">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <!-- Кнопка удаления -->
+                                <button class="btn btn-danger btn-action"
+                                        th:onclick="'confirmDeleteUser(\'' + ${user.id} + '\')'"
+                                        title="Удалить">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Пагинация -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Предыдущая</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Следующая</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно добавления пользователя -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Добавить нового пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="firstName" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label">Фамилия</label>
+                            <input type="text" class="form-control" id="lastName" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Имя пользователя</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Телефон</label>
+                            <input type="tel" class="form-control" id="phone">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Роль</label>
+                            <select class="form-control" id="role">
+                                <option value="USER">Пользователь</option>
+                                <option value="ADMIN">Администратор</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="confirmPassword" class="form-label">Подтверждение пароля</label>
+                            <input type="password" class="form-control" id="confirmPassword" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary">Добавить пользователя</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно просмотра пользователя -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewUserModalLabel">Просмотр пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Контент для просмотра пользователя будет загружаться динамически -->
+                <div class="text-center">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p>Загрузка данных пользователя...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно редактирования пользователя -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form th:action="@{/admin/update_user/__id__}" method="post" id="editUserForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Редактирование пользователя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="editUserId">
+                    <div class="mb-3">
+                        <label>Имя пользователя</label>
+                        <input type="text" class="form-control" name="username" id="editUsername" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Имя</label>
+                        <input type="text" class="form-control" name="firstName" id="editFirstName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Фамилия</label>
+                        <input type="text" class="form-control" name="lastName" id="editLastName"  required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Функция для подтверждения удаления пользователя
+    function confirmDeleteUser(userId) {
+        if (confirm('Вы уверены, что хотите удалить этого пользователя?')) {
+            // Здесь будет код для удаления пользователя
+            window.location.href = '/admin/delete_user/' + userId;
+        }
+    }
+
+    // Инициализация модальных окон
+    const viewUserModal = document.getElementById('viewUserModal');
+    if (viewUserModal) {
+        viewUserModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-bs-userid');
+
+            // Находим тело модалки
+            const modalBody = viewUserModal.querySelector('.modal-body');
+            // Ставим индикатор загрузки перед запросом
+            modalBody.innerHTML = `
+            <div class="text-center">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p>Загрузка данных пользователя...</p>
+            </div>
+        `;
+
+            // Загружаем данные пользователя
+            fetch('/admin/user/' + userId)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при загрузке данных пользователя');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    modalBody.innerHTML = `
+                    <div>
+                        <p><strong>ID:</strong> ${user.id}</p>
+                        <p><strong>Имя пользователя:</strong> ${user.username}</p>
+                        <p><strong>Имя:</strong> ${user.firstName}</p>
+                        <p><strong>Фамилия:</strong> ${user.lastName}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Телефон:</strong> ${user.phone}</p>
+                        <p><strong>Роль:</strong> ${user.role}</p>
+                    </div>
+                `;
+                })
+                .catch(error => {
+                    modalBody.innerHTML = `
+                    <div class="alert alert-danger text-center">
+                        Ошибка: ${error.message}
+                    </div>
+                `;
+                });
+        });
+    }
+
+    const editUserModal = document.getElementById('editUserModal');
+    if (editUserModal) {
+        editUserModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-bs-userid');
+            const username = button.getAttribute('data-bs-username');
+            const firstName = button.getAttribute('data-bs-firstname');
+            const lastName = button.getAttribute('data-bs-lastname');
+
+            document.getElementById('editUserId').value = userId;
+            document.getElementById('editUsername').value = username;
+            document.getElementById('editFirstName').value = firstName;
+            document.getElementById('editLastName').value = lastName;
+
+            document.getElementById('editUserForm').action = '/admin/update_user/' + userId;
+        });
+    }
+    /*<![CDATA[*/
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'admin') {
+        alert('Нельзя удалить администратора!');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

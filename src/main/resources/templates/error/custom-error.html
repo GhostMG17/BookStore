@@ -225,14 +225,26 @@
 
     <p>Не волнуйтесь, это временные трудности. Пока мы исправляем проблему, вы можете:</p>
 
-    <div class="action-buttons">
-        <a href="/" class="btn-primary">
+    <div class="action-buttons" xmlns:th="http://www.thymeleaf.org"
+         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+        <a th:href="@{/}"
+           sec:authorize="!hasRole('ADMIN')"
+           class="btn-primary">
             <i class="fas fa-home me-2"></i>Вернуться на главную
         </a>
+
+        <a th:href="@{/admin/dashboard}"
+           sec:authorize="hasRole('ADMIN')"
+           class="btn-primary">
+            <i class="fas fa-home me-2"></i>Вернуться на панель админа
+        </a>
+
         <a href="javascript:history.back()" class="btn-outline">
             <i class="fas fa-arrow-left me-2"></i>Вернуться назад
         </a>
     </div>
+
 
     <div class="book-icons">
         <i class="fas fa-book"></i>

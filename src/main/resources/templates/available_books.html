@@ -305,8 +305,8 @@
                     <td th:text="${'$' + book.price}"></td>
                     <td th:text="${book.year}"></td>
                     <td>
-                        <a th:href="@{'/book_download/' + ${book.id}}" class="btn btn-sm btn-success">
-                            Скачать
+                        <a th:href="@{'/book_download/' + ${book.id}}" class="btn btn-success btn-sm">
+                            <i class="fas fa-download me-1"></i> Скачать
                         </a>
                     </td>
                     <td>
@@ -321,8 +321,6 @@
                             </span>
                         </div>
                     </td>
-
-
                 </tr>
                 </tbody>
             </table>
