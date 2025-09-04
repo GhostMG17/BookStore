@@ -34,7 +34,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**","/admin-chat").hasRole("ADMIN")
                         .requestMatchers("/register","/process_register", "/login", "/error", "/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -46,7 +46,9 @@ public class WebSecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
-                );
+                )
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/ws/**","/chat/**"));
         return http.build();
     }
 

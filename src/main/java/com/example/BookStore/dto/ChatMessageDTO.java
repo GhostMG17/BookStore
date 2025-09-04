@@ -17,6 +17,7 @@ public class ChatMessageDTO {
     private String timestamp;
     private String senderUsername;   // добавили
     private String receiverUsername; // добавили
+    private boolean readStatus;
 
     public ChatMessageDTO(Message msg) {
         this.senderId = msg.getSender().getId();
@@ -25,5 +26,6 @@ public class ChatMessageDTO {
         this.receiverUsername = msg.getReceiver().getUsername();
         this.content = msg.getContent();
         this.timestamp = msg.getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm"));
+        this.readStatus = msg.isReadStatus();
     }
 }

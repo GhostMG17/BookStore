@@ -12,6 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class WebSocketController {
@@ -60,7 +65,6 @@ public class WebSocketController {
     }
 
 
-
     @GetMapping("/chat-page")
     public String chatPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if(userDetails != null) {
@@ -82,5 +86,38 @@ public class WebSocketController {
         }
         return "chat/admin-chat"; // путь к thymeleaf файлу admin-chat.html
     }
+
+
+    @GetMapping("/chat/history/{userId}")
+    @ResponseBody
+    public List<ChatMessageDTO> getChatHistory(@PathVariable Long userId, @AuthenticationPrincipal UserDetails userDetails) {
+
+
+        User admin = userService.findById(1L);
+        User user = userService.findById(userId);
+
+
+
+        return messageService.getConversation(admin, user)
+                .stream()
+                .map(ChatMessageDTO::new)
+                .toList();
+    }
+
+    @GetMapping("/chat/users")
+    @ResponseBody
+    public List<User> getChatUsers() {
+        User admin = userService.findById(1L); // твой админ
+        return messageService.getUsersWhoChattedWithAdmin(admin);
+    }
+
+    @PostMapping("/chat/read/{userId}")
+    @ResponseBody
+    public void markAsRead(@PathVariable Long userId) {
+        User admin = userService.findById(1L);
+        User user = userService.findById(userId);
+        messageService.markAsRead(user, admin);
+    }
+
 
 }

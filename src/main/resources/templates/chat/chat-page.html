@@ -4,17 +4,244 @@
     <title>User Chat</title>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+            --primary-light: #8b5cf6;
+            --secondary: #f8fafc;
+            --accent: #0ea5e9;
+            --accent-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light-bg: #ffffff;
+            --dark-bg: #0f172a;
+            --sidebar-bg: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-dark: #1e293b;
+            --border-radius: 16px;
+            --border-radius-sm: 8px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark-theme {
+            --light-bg: #0f172a;
+            --secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --sidebar-border: #334155;
+            --card-bg: rgba(30, 41, 59, 0.95);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .chat-wrapper {
+            width: 100%;
+            height: 100%;
+            background: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border-radius: 0;
+        }
+
+        .chat-header {
+            padding: 16px 24px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            background: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: var(--transition);
+            background-image:
+                    radial-gradient(circle at 25px 25px, rgba(99, 102, 241, 0.1) 2%, transparent 50%),
+                    radial-gradient(circle at 75px 75px, rgba(124, 58, 237, 0.1) 2%, transparent 50%);
+            background-size: 100px 100px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 20px 24px;
+            background: var(--card-bg);
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--secondary);
+            color: var(--text-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .chat-input button {
+            padding: 12px 24px;
+            border: none;
+            background: var(--primary-gradient);
+            color: white;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .message {
+            margin: 4px 0;
+            padding: 14px 18px;
+            border-radius: 18px;
+            max-width: 75%;
+            clear: both;
+            position: relative;
+            transition: var(--transition);
+            animation: messageAppear 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .user-message {
+            background: var(--primary-gradient);
+            color: white;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+        }
+
+        .admin-message {
+            background: var(--card-bg);
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .chat-messages {
+                padding: 16px;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+            .chat-input {
+                padding: 16px;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+    </style>
 </head>
 <body>
-<h2>Chat with Admin</h2>
+<div class="chat-wrapper">
+    <div class="chat-header">
+        <div>
+            <div style="font-size: 1.2rem; font-weight: 700;">Chat with Admin</div>
+            <div style="font-size: 0.85rem; color: var(--success); display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-circle" style="font-size: 0.5rem;"></i> Online
+            </div>
+        </div>
 
-<div id="chat" style="border:1px solid #ccc; height:300px; overflow:auto; padding:10px;"></div>
+        <a href="/" style="text-decoration: none;">
+            <button style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--text-secondary); background: transparent; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </a>
 
-<input type="text" id="messageInput" placeholder="Enter message">
-<button onclick="sendMessage()">Send</button>
+    </div>
+    <div class="chat-messages" id="chat">
+    </div>
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Type your message...">
+        <button onclick="sendMessage()">
+            <span>Send</span>
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
 
 <script th:inline="javascript">
     var currentUserId = /*[[${currentUser.id}]]*/ 2; // текущий пользователь
+    var currentUsername = /*[[${currentUser.username}]]*/ 'You';
     var adminId = 1;
     var stompClient = null;
 
@@ -24,24 +251,29 @@
         stompClient.connect({}, function(frame) {
             console.log('Connected: ' + frame);
 
-            // Подписка на ответы админа
+            // Подписка на личные сообщения
             stompClient.subscribe('/topic/private-' + currentUserId, function(messageOutput) {
                 var msg = JSON.parse(messageOutput.body);
-                var chatDiv = document.getElementById("chat");
-                chatDiv.innerHTML += "<p><b>" + msg.senderUsername + ":</b> " + msg.content + "</p>";
-                chatDiv.scrollTop = chatDiv.scrollHeight;
+                appendMessage(msg.senderUsername, msg.content, "admin-message");
             });
         });
+    }
+
+    function appendMessage(sender, content, cssClass) {
+        var chatDiv = document.getElementById("chat");
+        var msgDiv = document.createElement("div");
+        msgDiv.className = "message " + cssClass;
+        msgDiv.innerHTML = "<b>" + sender + ":</b> " + content;
+        chatDiv.appendChild(msgDiv);
+        chatDiv.scrollTop = chatDiv.scrollHeight;
     }
 
     function sendMessage() {
         var content = document.getElementById("messageInput").value.trim();
         if (!content || !stompClient) return;
 
-        // Показываем своё сообщение сразу
-        var chatDiv = document.getElementById("chat");
-        chatDiv.innerHTML += "<p><b>You:</b> " + content + "</p>";
-        chatDiv.scrollTop = chatDiv.scrollHeight;
+        // Показываем своё сообщение
+        appendMessage(currentUsername, content, "user-message");
 
         stompClient.send("/app/private-message", {}, JSON.stringify({
             senderId: currentUserId,
@@ -51,6 +283,18 @@
 
         document.getElementById("messageInput").value = '';
     }
+
+    window.onload = function() {
+        fetch('/chat/history/' + currentUserId)
+            .then(response => response.json())
+            .then(messages => {
+                messages.forEach(msg => {
+                    let cssClass = msg.senderId === currentUserId ? "user-message" : "admin-message";
+                    appendMessage(msg.senderUsername, msg.content, cssClass);
+                });
+            });
+    };
+
 
     connect();
 </script>
