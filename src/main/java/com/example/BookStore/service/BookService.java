@@ -47,6 +47,8 @@ public class BookService {
         return bookRepository.findRecentBooks(PageRequest.of(0, 5));
     }
 
-
+    public List<Book> getBooksByCategoryId(Long categoryId) {
+        return bookRepository.findByCategoryId(categoryId);
+    }
 
 }

@@ -293,6 +293,7 @@
                     <th>Автор</th>
                     <th>Цена</th>
                     <th>Год</th>
+                    <th>Категория</th>
                     <th>Ccылки</th>
                     <th>Действия</th>
                 </tr>
@@ -304,6 +305,7 @@
                     <td th:text="${book.author}"></td>
                     <td th:text="${'$' + book.price}"></td>
                     <td th:text="${book.year}"></td>
+                    <td th:text="${book.category?.name}">—</td>
                     <td>
                         <a th:href="@{'/book_download/' + ${book.id}}" class="btn btn-success btn-sm">
                             <i class="fas fa-download me-1"></i> Скачать

@@ -14,6 +14,10 @@ public class Book {
     private int year;
     private String filePath;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     public Book(Long id, String title, String author, double price, int year, String filePath) {
         this.id = id;
         this.title = title;
@@ -23,8 +27,14 @@ public class Book {
         this.filePath = filePath;
     }
 
-    public Book() {
+    public Book() {}
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getFilePath() {

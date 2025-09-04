@@ -273,6 +273,18 @@
                     </div>
 
                     <div class="mb-4">
+                        <label for="category" class="form-label">Жанр</label>
+                        <select class="form-select" id="category" th:field="*{category}" required>
+                            <option value="" disabled>Выберите жанр</option>
+                            <option th:each="cat : ${categories}"
+                                    th:value="${cat.id}"
+                                    th:text="${cat.name}"
+                                    th:selected="${book.category != null and cat.id == book.category.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
                         <label for="file" class="form-label">Выберите книгу (PDF, EPUB)</label>
                         <input type="file" class="form-control" id="file" name="file" required>
                     </div>

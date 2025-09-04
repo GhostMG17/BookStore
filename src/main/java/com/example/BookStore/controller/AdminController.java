@@ -2,8 +2,10 @@ package com.example.BookStore.controller;
 
 import com.example.BookStore.dto.UserDto;
 import com.example.BookStore.entity.Book;
+import com.example.BookStore.entity.Category;
 import com.example.BookStore.entity.User;
 import com.example.BookStore.service.BookService;
+import com.example.BookStore.service.CategoryService;
 import com.example.BookStore.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,10 +24,12 @@ import java.util.List;
 public class AdminController {
     private final BookService bookService;
     private final UserService userService;
+    private final CategoryService categoryService;
 
-    public AdminController(BookService bookService, UserService userService) {
+    public AdminController(BookService bookService, UserService userService, CategoryService categoryService) {
         this.bookService = bookService;
         this.userService = userService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/dashboard")
@@ -43,14 +47,26 @@ public class AdminController {
 
 
     @GetMapping("/available_books_for_admin")
-    public String getAllBooks(Model model){
-        model.addAttribute("books", bookService.getAllBooks());
+    public String getAllBooks(@RequestParam(required = false) Long categoryId, Model model) {
+        List<Category> categories = categoryService.getAllCategories();
+        List<Book> books;
+
+        if (categoryId != null) {
+            books = bookService.getBooksByCategoryId(categoryId);
+        } else {
+            books = bookService.getAllBooks();
+        }
+
+        model.addAttribute("books", books);
+        model.addAttribute("categories", categories);
+        model.addAttribute("selectedCategoryId", categoryId);
+
         return "admin/booking_management";
     }
-
     @GetMapping("/book_register")
     public String showBookRegister(Model model){
         model.addAttribute("book", new Book());
+        model.addAttribute("categories",categoryService.getAllCategories());
         return "admin/book_register";
     }
 
@@ -70,6 +86,7 @@ public class AdminController {
 
     @PostMapping("/book_add")
     public String addBook(@ModelAttribute Book book,
+                          @RequestParam("categoryId") Long categoryId,
                           @RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new RuntimeException("Файл книги не выбран!");
@@ -84,17 +101,21 @@ public class AdminController {
         String fileName = file.getOriginalFilename();
         Path filePath = uploadPath.resolve(fileName);
         Files.write(filePath, file.getBytes());
-
         book.setFilePath(filePath.toString());
-        bookService.save(book);
-        return "redirect:/available_books";
-    }
 
+        if (categoryId != null) {
+            Category category = categoryService.getCategoryById(categoryId);
+            book.setCategory(category);
+        }
+        bookService.save(book);
+        return "redirect:/admin/available_books_for_admin";
+    }
 
     @GetMapping("/edit_book/{id}")
     public String edit_book(@PathVariable("id") Long id, Model model){
         Book book = bookService.getBookById(id);
         model.addAttribute("book", book);
+        model.addAttribute("categories",categoryService.getAllCategories());
         return "admin/edit_book";
     }
 
@@ -110,6 +131,7 @@ public class AdminController {
         existingBook.setAuthor(book.getAuthor());
         existingBook.setPrice(book.getPrice());
         existingBook.setYear(book.getYear());
+        existingBook.setCategory(book.getCategory());
 
         // Если пришёл новый файл, сохраняем его
         if (!file.isEmpty()) {
@@ -126,7 +148,7 @@ public class AdminController {
             existingBook.setFilePath(filePath.toString());
         }
         bookService.updateBook(existingBook);
-        return "redirect:/available_books";
+        return "redirect:/admin/available_books_for_admin";
     }
 
 
