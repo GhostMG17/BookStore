@@ -46,6 +46,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true; // можно сделать логику из базы
+        return user.isEnabled(); // можно сделать логику из базы
     }
 }

@@ -130,6 +130,4 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", "Password Changed Successfully");
         return "redirect:/profile";
     }
-
-
 }

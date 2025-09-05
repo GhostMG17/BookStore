@@ -45,6 +45,17 @@ public class User {
     private Role role; // ADMIN или USER
 
 
+    @Column(nullable = false)
+    private boolean enabled = false;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "user_books",

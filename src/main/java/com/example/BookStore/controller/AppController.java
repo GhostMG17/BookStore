@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AppController {
@@ -52,6 +53,19 @@ public class AppController {
     @GetMapping("/login")
     public String login() {
         return "login"; // Thymeleaf-шаблон login.html
+    }
+
+
+    @GetMapping("/verify")
+    public String verifyAccount(@RequestParam("token") String token, Model model) {
+        boolean verified = userService.verifyUser(token);
+        if (verified) {
+            model.addAttribute("message", "Account verified successfully! You can now login.");
+            return "login";
+        } else {
+            model.addAttribute("message", "Invalid or expired token.");
+            return "error"; // сделай страничку error.html
+        }
     }
 
 }
