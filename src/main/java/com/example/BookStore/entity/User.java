@@ -1,7 +1,10 @@
 package com.example.BookStore.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +28,6 @@ public class User {
     @Email(message = "Invalid email format")
     private String email;
 
-
     @NotBlank(message = "First name is required")
     @Size(max = 30, message = "First name must not exceed 30 characters")
     private String firstName;
@@ -44,17 +46,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role; // ADMIN или USER
 
-
     @Column(nullable = false)
     private boolean enabled = false;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
 
     @ManyToMany
     @JoinTable(
@@ -62,15 +64,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
+
     private Set<MyBookList> myBooks = new HashSet<>();
-
-    public Set<MyBookList> getMyBooks() {
-        return myBooks;
-    }
-
-    public void setMyBooks(Set<MyBookList> myBooks) {
-        this.myBooks = myBooks;
-    }
 
     public User(Long id, String username, String password, Role role, String firstName, String lastName, String phone,String avatar ,String email) {
         this.id = id;
@@ -84,83 +79,59 @@ public class User {
         this.email = email;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
+    public String getAvatar() {return avatar;}
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
+    public void setAvatar(String avatar) {this.avatar = avatar;}
 
-    public User() {
+    public User() {}
 
-    }
+    public enum Role {ADMIN, USER}
 
-    public enum Role {
-        ADMIN, USER
-    }
+    public LocalDateTime getCreatedAt() {return createdAt;}
 
-    public Long getId() {
-        return id;
-    }
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public LocalDateTime getUpdatedAt() {return updatedAt;}
 
-    public String getUsername() {
-        return username;
-    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public Long getId() {return id;}
 
-    public String getPassword() {
-        return password;
-    }
+    public void setId(Long id) {this.id = id;}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getUsername() {return username;}
 
-    public Role getRole() {
-        return role;
-    }
+    public void setUsername(String username) {this.username = username;}
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    public String getPassword() {return password;}
 
-    public String getEmail() {
-        return email;
-    }
+    public void setPassword(String password) {this.password = password;}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public Role getRole() {return role;}
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public void setRole(Role role) {this.role = role;}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public String getEmail() {return email;}
 
-    public String getLastName() {
-        return lastName;
-    }
+    public void setEmail(String email) {this.email = email;}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public String getFirstName() {return firstName;}
 
-    public String getPhone() {
-        return phone;
-    }
+    public void setFirstName(String firstName) {this.firstName = firstName;}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    public String getLastName() {return lastName;}
+
+    public void setLastName(String lastName) {this.lastName = lastName;}
+
+    public String getPhone() {return phone;}
+
+    public void setPhone(String phone) {this.phone = phone;}
+
+    public Set<MyBookList> getMyBooks() {return myBooks;}
+
+    public void setMyBooks(Set<MyBookList> myBooks) {this.myBooks = myBooks;}
+
+    public boolean isEnabled() {return enabled;}
+
+    public void setEnabled(boolean enabled) {this.enabled = enabled;}
 }

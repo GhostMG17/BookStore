@@ -405,6 +405,8 @@
                         <th>Телефон</th>
                         <th>Роль</th>
                         <th>Кол-во книг</th>
+                        <th>Добавлено</th>
+                        <th>Изменено</th>
                         <th>Действия</th>
                     </tr>
                     </thead>
@@ -422,6 +424,8 @@
                             <span th:unless="${user.role.name() == 'ADMIN'}" class="badge badge-status badge-user">Пользователь</span>
                         </td>
                         <td th:text="${user.myBooks.size()}"></td>
+                        <td th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(user.updatedAt, 'dd.MM.yyyy HH:mm')}"></td>
                         <td>
                             <div class="action-buttons">
                                 <!-- Кнопка просмотра -->

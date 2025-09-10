@@ -47,7 +47,6 @@ public class UserService {
 
         // отправляем письмо
         sendVerificationEmail(savedUser.getEmail(), token);
-
         return savedUser;
     }
 

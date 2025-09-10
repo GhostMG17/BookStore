@@ -1,6 +1,10 @@
 package com.example.BookStore.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "books")
@@ -18,6 +22,42 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @CreationTimestamp
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.ACTIVE;
+
+    public enum Status {
+        ACTIVE("Active", "success"),
+        INACTIVE("Inactive", "secondary"),
+        ARCHIVED("Archived", "warning"),
+        DELETED("Deleted", "danger");
+
+        private final String displayName;
+        private final String color;
+
+        Status(String displayName, String color) {
+            this.displayName = displayName;
+            this.color = color;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public String getColor() {
+            return color;
+        }
+    }
+
+
     public Book(Long id, String title, String author, double price, int year, String filePath) {
         this.id = id;
         this.title = title;
@@ -29,13 +69,33 @@ public class Book {
 
     public Book() {}
 
-    public Category getCategory() {
-        return category;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Category getCategory() {return category;}
+
+    public void setCategory(Category category) {this.category = category;}
 
     public String getFilePath() {
         return filePath;

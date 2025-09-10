@@ -320,6 +320,9 @@
                         <th>Цена</th>
                         <th>Год</th>
                         <th>Категория</th>
+                        <th>Создано</th>
+                        <th>Изменено</th>
+                        <th>Статус</th>
                         <th>Ссылки</th>
                         <th>Действия</th>
                     </tr>
@@ -332,6 +335,14 @@
                         <td th:text="${'$' + book.price}"></td>
                         <td th:text="${book.year}"></td>
                         <td th:text="${book.category?.name}">—</td>
+                        <td th:text="${#temporals.format(book.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(book.updatedAt, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td>
+                            <span th:text="${book.status.displayName}"
+                                  th:class="'badge bg-' + ${book.status.color}">
+                            </span>
+                        </td>
+
                         <td>
                             <a th:href="@{'/book_download/' + ${book.id}}" class="btn btn-success btn-sm">
                                 <i class="fas fa-download me-1"></i> Скачать
