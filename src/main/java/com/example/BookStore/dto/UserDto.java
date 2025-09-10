@@ -1,6 +1,6 @@
 package com.example.BookStore.dto;
 
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.user.User;
 
 public class UserDto {
     private Long id;

@@ -1,4 +1,4 @@
-package com.example.BookStore.entity;
+package com.example.BookStore.entity.book;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

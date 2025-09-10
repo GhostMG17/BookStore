@@ -1,8 +1,8 @@
 package com.example.BookStore.controller;
 
 import com.example.BookStore.dto.ChatMessageDTO;
-import com.example.BookStore.entity.Message;
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.user.Message;
+import com.example.BookStore.entity.user.User;
 import com.example.BookStore.service.MessageService;
 import com.example.BookStore.service.UserService;
 import org.springframework.messaging.handler.annotation.MessageMapping;

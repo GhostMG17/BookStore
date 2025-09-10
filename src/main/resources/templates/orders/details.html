@@ -1,0 +1,24 @@
+<h1>Детали заказа #[[${order.id}]]</h1>
+<p>Статус: [[${order.status}]]</p>
+<p>Сумма: [[${order.totalPrice}]]</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Книга</th>
+        <th>Количество</th>
+        <th>Цена за шт</th>
+        <th>Сумма</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+        <td th:text="${item.book.title}">Название книги</td>
+        <td th:text="${item.quantity}">1</td>
+        <td th:text="${item.price}">0</td>
+        <td th:text="${item.quantity * item.price}">0</td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/orders/history}">Вернуться к истории заказов</a>

@@ -1,6 +1,8 @@
-package com.example.BookStore.entity;
+package com.example.BookStore.entity.book;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.example.BookStore.entity.user.User;
 import jakarta.persistence.*;
 
 @Entity

@@ -1,6 +1,8 @@
-package com.example.BookStore.entity;
+package com.example.BookStore.entity.user;
+import com.example.BookStore.entity.book.MyBookList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -49,7 +51,7 @@ public class User {
     @Column(nullable = false)
     private boolean enabled = false;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 

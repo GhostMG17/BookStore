@@ -1,10 +1,9 @@
 package com.example.BookStore.repository;
 
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {

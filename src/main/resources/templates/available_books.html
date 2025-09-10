@@ -321,6 +321,16 @@
                             <span th:if="${myBookTitles != null and myBookTitles.contains(book.title)}">
                                 Книга добавлена
                             </span>
+
+                            <form th:action="@{/cart/add}" method="post" style="display:inline-block; margin-left:5px;">
+                                <input type="hidden" name="userId" th:value="${#authentication.principal.id}" />
+                                <input type="hidden" name="bookId" th:value="${book.id}" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-shopping-cart me-1"></i> В корзину
+                                </button>
+                            </form>
+
                         </div>
                     </td>
                 </tr>

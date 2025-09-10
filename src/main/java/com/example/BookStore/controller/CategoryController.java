@@ -1,6 +1,6 @@
 package com.example.BookStore.controller;
 
-import com.example.BookStore.entity.Category;
+import com.example.BookStore.entity.book.Category;
 import com.example.BookStore.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

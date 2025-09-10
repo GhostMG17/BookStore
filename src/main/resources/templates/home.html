@@ -440,10 +440,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="available_books"><i class="fas fa-book me-1"></i> Каталог</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="my_books"><i class="fas fa-bookmark me-1"></i> Мои книги</a>
-                </li>
-
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link" href="/admin/dashboard">
                         <i class="fas fa-crown me-1"></i> Admin Panel
@@ -475,6 +471,12 @@
                         <li>
                             <a class="dropdown-item" href="my_books">
                                 <i class="fas fa-bookmark me-2"></i> Мои книги
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/cart">
+                                <i class="fas fa-shopping-cart me-2"></i> Корзина
+                                <span class="badge bg-primary ms-1" th:text="${cartItemCount}">0</span>
                             </a>
                         </li>
                         <li>

@@ -1,8 +1,8 @@
 package com.example.BookStore.controller;
 
-import com.example.BookStore.entity.Book;
-import com.example.BookStore.entity.MyBookList;
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.book.Book;
+import com.example.BookStore.entity.book.MyBookList;
+import com.example.BookStore.entity.user.User;
 import com.example.BookStore.service.BookService;
 import com.example.BookStore.service.MyBookListService;
 import com.example.BookStore.service.UserService;
@@ -21,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;

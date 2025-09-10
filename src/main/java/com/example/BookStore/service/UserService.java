@@ -1,7 +1,7 @@
 package com.example.BookStore.service;
 
-import com.example.BookStore.entity.User;
-import com.example.BookStore.entity.VerificationToken;
+import com.example.BookStore.entity.user.User;
+import com.example.BookStore.entity.user.VerificationToken;
 import com.example.BookStore.repository.UserRepository;
 import com.example.BookStore.repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;

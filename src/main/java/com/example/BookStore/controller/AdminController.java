@@ -1,9 +1,9 @@
 package com.example.BookStore.controller;
 
 import com.example.BookStore.dto.UserDto;
-import com.example.BookStore.entity.Book;
-import com.example.BookStore.entity.Category;
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.book.Book;
+import com.example.BookStore.entity.book.Category;
+import com.example.BookStore.entity.user.User;
 import com.example.BookStore.service.BookService;
 import com.example.BookStore.service.CategoryService;
 import com.example.BookStore.service.UserService;

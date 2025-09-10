@@ -1,7 +1,7 @@
 package com.example.BookStore.service;
 
-import com.example.BookStore.entity.MyBookList;
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.book.MyBookList;
+import com.example.BookStore.entity.user.User;
 import com.example.BookStore.repository.MyBookRepository;
 import com.example.BookStore.repository.UserRepository;
 import jakarta.transaction.Transactional;

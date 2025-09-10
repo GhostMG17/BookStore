@@ -1,6 +1,6 @@
 package com.example.BookStore.dto;
 
-import com.example.BookStore.entity.Message;
+import com.example.BookStore.entity.user.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.BookStore.service;
 
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +12,10 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(User user) {
         this.user = user;
+    }
+
+    public Long getId(){
+        return user.getId();
     }
 
     @Override

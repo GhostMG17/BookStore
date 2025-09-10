@@ -1,6 +1,6 @@
 package com.example.BookStore.service;
 
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.user.User;
 import com.example.BookStore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

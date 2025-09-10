@@ -1,7 +1,7 @@
 package com.example.BookStore.repository;
 
-import com.example.BookStore.entity.Message;
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.user.Message;
+import com.example.BookStore.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

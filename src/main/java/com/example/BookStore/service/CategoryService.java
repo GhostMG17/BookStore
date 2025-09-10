@@ -1,6 +1,6 @@
 package com.example.BookStore.service;
 
-import com.example.BookStore.entity.Category;
+import com.example.BookStore.entity.book.Category;
 import com.example.BookStore.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 

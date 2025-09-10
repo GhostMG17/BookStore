@@ -1,7 +1,7 @@
 package com.example.BookStore.service;
 
-import com.example.BookStore.entity.Message;
-import com.example.BookStore.entity.User;
+import com.example.BookStore.entity.user.Message;
+import com.example.BookStore.entity.user.User;
 import com.example.BookStore.repository.MessageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
