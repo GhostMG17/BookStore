@@ -47,11 +47,29 @@
             border: none;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
         }
 
         .card-header {
+            background-color: rgba(44, 62, 80, 0.05);
             border-bottom: 1px solid rgba(0,0,0,0.05);
             font-weight: 600;
+            padding: 1rem 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 0.75rem 1.5rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--dark);
         }
 
         .table th {
@@ -139,56 +157,90 @@
             color: white;
             transform: translateY(-2px);
         }
+
+        .form-select {
+            border-radius: 30px;
+            padding: 8px 20px;
+            border: 1px solid #ddd;
+        }
+
+        .status-form {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="section-title">Детали заказа #<span th:text="${order.id}"></span></h1>
-        <a th:href="@{/orders/history}" class="btn btn-outline-primary">
-            <i class="fas fa-arrow-left me-1"></i> Вернуться к истории заказов
+        <a th:href="@{/admin/orders}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-1"></i> Назад к заказам
         </a>
     </div>
 
-    <div class="row mb-4">
+    <div class="row">
         <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header bg-light">
+            <div class="card">
+                <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Информация о заказе</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-5 fw-bold">Статус:</div>
-                        <div class="col-7">
-                                <span class="badge" th:classappend="'bg-' + ${order.status}">
-                                    <span th:switch="${order.status}">
-                                        <span th:case="'NEW'">Новый</span>
-                                        <span th:case="'PAID'">Оплачен</span>
-                                        <span th:case="'PROCESSING'">Обработка</span>
-                                        <span th:case="'COMPLETED'">Завершен</span>
-                                        <span th:case="'SHIPPED'">Отправлен</span>
-                                        <span th:case="'DELIVERED'">Доставлен</span>
-                                        <span th:case="'CANCELLED'">Отменен</span>
-                                        <span th:case="*" th:text="${order.status}"></span>
-                                    </span>
+                    <div class="info-grid">
+                        <span class="info-label">Пользователь:</span>
+                        <span th:text="${order.user.email}"></span>
+
+                        <span class="info-label">Дата создания:</span>
+                        <span th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+
+                        <span class="info-label">Общая сумма:</span>
+                        <span class="fw-bold" th:text="${@priceUtil.format(order.totalPrice)}"></span>
+
+
+                        <span class="info-label">Текущий статус:</span>
+                        <span class="badge" th:classappend="'bg-' + ${order.status}">
+                                <span th:switch="${order.status}">
+                                    <span th:case="'NEW'">Новый</span>
+                                    <span th:case="'PAID'">Оплачен</span>
+                                    <span th:case="'PROCESSING'">Обработка</span>
+                                    <span th:case="'COMPLETED'">Завершен</span>
+                                    <span th:case="'SHIPPED'">Отправлен</span>
+                                    <span th:case="'DELIVERED'">Доставлен</span>
+                                    <span th:case="'CANCELLED'">Отменен</span>
+                                    <span th:case="*" th:text="${order.status}"></span>
                                 </span>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-5 fw-bold">Общая сумма:</div>
-                        <div class="col-7" th:text="${@priceUtil.format(order.totalPrice)}"></div>
-                    </div>
-                    <div class="row mb-2" th:if="${order.createdAt}">
-                        <div class="col-5 fw-bold">Дата создания:</div>
-                        <div class="col-7" th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></div>
+                            </span>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-6">
+            <div class="status-form">
+                <h4 class="mb-3"><i class="fas fa-sync-alt me-2"></i>Обновление статуса</h4>
+                <form th:action="@{'/admin/' + ${order.id} + '/status'}" method="post" class="d-flex align-items-end">
+                    <div class="flex-grow-1 me-2">
+                        <label for="statusSelect" class="form-label fw-bold">Выберите статус:</label>
+                        <select name="status" id="statusSelect" class="form-select">
+                            <option th:each="status : ${statuses}"
+                                    th:value="${status}"
+                                    th:text="${status}"
+                                    th:selected="${status == order.status}">
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check me-1"></i> Обновить
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-        <div class="card-header bg-light">
+    <div class="card mt-4">
+        <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-book me-2"></i>Товары в заказе</h5>
         </div>
         <div class="card-body p-0">
@@ -203,11 +255,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="item : ${items}">
-                        <td th:text="${item.book.title}">Название книги</td>
-                        <td th:text="${item.quantity}">1</td>
-                        <td th:text="${@priceUtil.format(item.price)}"></td>
-                        <td th:text="${@priceUtil.format(item.quantity * item.price)}"></td>
+                    <tr th:each="item : ${order.items}">
+                        <td th:text="${item.book.title}"></td>
+                        <td th:text="${item.quantity}"></td>
+                        <td th:text="${@priceUtil.format(item.book.price)}"></td>
+                        <td th:text="${@priceUtil.format(item.quantity * item.book.price)}"></td>
                     </tr>
                     <tr class="table-secondary">
                         <td colspan="3" class="text-end fw-bold">Итого:</td>

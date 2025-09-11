@@ -243,9 +243,9 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="price" class="form-label">Цена ($)</label>
-                        <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required
-                               placeholder="0.00" min="0">
+                        <label for="price" class="form-label">Цена (сум)</label>
+                        <input type="number" step="1000" class="form-control" id="price" th:field="*{price}" required
+                               placeholder="Например, 20000" min="0">
                     </div>
 
                     <div class="mb-4">

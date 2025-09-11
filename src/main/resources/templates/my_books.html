@@ -285,7 +285,7 @@
                 <td th:text="${book.author}"></td>
                 <td th:text="${book.year}"></td>
                 <td>
-                    <span class="price" th:text="${'$' + book.price}"></span>
+                    <span class="price" th:text="${@priceUtil.format(book.price)}"></span>
                 </td>
                 <td>
                     <a class="btn btn-danger btn-sm"

@@ -303,7 +303,7 @@
                     <td th:text="${book.id}"></td>
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
-                    <td th:text="${'$' + book.price}"></td>
+                    <td th:text="${@priceUtil.format(book.price)}"></td>
                     <td th:text="${book.year}"></td>
                     <td th:text="${book.category?.name}">—</td>
                     <td>

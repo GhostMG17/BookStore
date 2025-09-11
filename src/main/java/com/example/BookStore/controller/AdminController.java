@@ -3,7 +3,10 @@ package com.example.BookStore.controller;
 import com.example.BookStore.dto.UserDto;
 import com.example.BookStore.entity.book.Book;
 import com.example.BookStore.entity.book.Category;
+import com.example.BookStore.entity.cart.Order;
 import com.example.BookStore.entity.user.User;
+import com.example.BookStore.repository.CartLogicRepository.OrderRepository;
+import com.example.BookStore.repository.UserRepository;
 import com.example.BookStore.service.BookService;
 import com.example.BookStore.service.CategoryService;
 import com.example.BookStore.service.UserService;
@@ -17,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,11 +29,19 @@ public class AdminController {
     private final BookService bookService;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
-    public AdminController(BookService bookService, UserService userService, CategoryService categoryService) {
+    public AdminController(BookService bookService,
+                           UserService userService,
+                           CategoryService categoryService,
+                           OrderRepository orderRepository,
+                           UserRepository userRepository) {
         this.bookService = bookService;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/dashboard")
@@ -63,6 +75,8 @@ public class AdminController {
 
         return "admin/booking_management";
     }
+
+
     @GetMapping("/book_register")
     public String showBookRegister(Model model){
         model.addAttribute("book", new Book());
@@ -77,12 +91,14 @@ public class AdminController {
         return "admin/users_management";
     }
 
+
     @GetMapping("/user/{id}")
     @ResponseBody
     public UserDto getUser(@PathVariable Long id){
         User user = userService.findById(id);
         return new UserDto(user);
     }
+
 
     @PostMapping("/book_add")
     public String addBook(@ModelAttribute Book book,
@@ -110,6 +126,7 @@ public class AdminController {
         bookService.save(book);
         return "redirect:/admin/available_books_for_admin";
     }
+
 
     @GetMapping("/edit_book/{id}")
     public String edit_book(@PathVariable("id") Long id, Model model){
@@ -174,12 +191,12 @@ public class AdminController {
     }
 
 
-
     @GetMapping("/delete_book/{id}")
     public String delete_book(@PathVariable Long id) {
         bookService.deleteBookById(id);
         return "redirect:/available_books";
     }
+
 
     @GetMapping("/delete_user/{id}")
     public String delete_user(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -197,4 +214,35 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("success", "Пользователь успешно удалён.");
         return "redirect:/admin/users_management?success=true";
     }
+
+
+    @GetMapping("/orders")
+    public String orders(Model model) {
+        List<Order> orders = orderRepository.findAll();
+        model.addAttribute("orders", orders);
+        return "admin/orders";
+    }
+
+
+    @GetMapping("/orders/{id}")
+    public String orderDetails(@PathVariable Long id, Model model) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        model.addAttribute("order", order);
+        model.addAttribute("statuses", Order.OrderStatus.values());
+        return "admin/order_details";
+    }
+
+
+    @PostMapping("/{id}/status")
+    public String updateStatus(@PathVariable Long id,
+                               @RequestParam("status") Order.OrderStatus status) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(status);
+        orderRepository.save(order);
+
+        return "redirect:/admin/orders";
+    }
+
 }

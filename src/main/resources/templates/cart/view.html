@@ -1,66 +1,273 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Моя корзина</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя корзина | NEW BOOK STORE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #95a5a6;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin-top: 10px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--accent);
+            padding: 1rem 0.75rem;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 1rem 0.75rem;
+        }
+
+        .btn-primary {
+            background-color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .total-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+    </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-book me-2"></i>NEW BOOK STORE
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Главная</a>
+        </div>
+    </div>
+</nav>
+
 <div class="container mt-5">
-    <h2>Моя корзина</h2>
+    <h1 class="section-title">Моя корзина</h1>
 
     <div th:if="${#lists.isEmpty(cart.items)}">
-        <p>Ваша корзина пуста.</p>
-        <a href="/" class="btn btn-primary">Вернуться к книгам</a>
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h3>Ваша корзина пуста</h3>
+            <p class="mb-4">Добавьте книги из каталога, чтобы они появились здесь</p>
+            <a href="/available_books" class="btn btn-primary">
+                <i class="fas fa-book me-1"></i> Вернуться к книгам
+            </a>
+        </div>
     </div>
 
     <div th:if="${!#lists.isEmpty(cart.items)}">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Книга</th>
-                <th>Автор</th>
-                <th>Цена</th>
-                <th>Количество</th>
-                <th>Сумма</th>
-                <th>Действия</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${cart.items}">
-                <td th:text="${item.book.title}"></td>
-                <td th:text="${item.book.author}"></td>
-                <td th:text="${item.book.price} + ' UZS'"></td>
-                <td th:text="${item.quantity}"></td>
-                <td th:text="${item.book.price * item.quantity} + ' UZS'"></td>
-                <td>
-                    <form th:action="@{/cart/remove}" method="post" style="display:inline;">
-                        <input type="hidden" name="userId" th:value="${cart.user.id}">
-                        <input type="hidden" name="cartItemId" th:value="${item.id}">
-                        <button class="btn btn-sm btn-danger" type="submit">Удалить</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                        <tr>
+                            <th>Книга</th>
+                            <th>Автор</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Сумма</th>
+                            <th>Действия</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${cart.items}">
+                            <td th:text="${item.book.title}"></td>
+                            <td th:text="${item.book.author}"></td>
+                            <td th:text="${@priceUtil.format(item.book.price)}"></td>
+                            <td th:text="${item.quantity}"></td>
+                            <td th:text="${@priceUtil.format(item.book.price * item.quantity)}"></td>
+                            <td>
+                                <form th:action="@{/cart/remove}" method="post" style="display:inline;">
+                                    <input type="hidden" name="userId" th:value="${cart.user.id}">
+                                    <input type="hidden" name="cartItemId" th:value="${item.id}">
+                                    <button class="btn btn-sm btn-danger" type="submit">
+                                        <i class="fas fa-trash me-1"></i> Удалить
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td colspan="4" class="text-end fw-bold">Итоговая сумма:</td>
+                            <td class="total-price" th:text="${@priceUtil.format(totalPrice)}"></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mt-4">
             <form th:action="@{/cart/clear}" method="post">
                 <input type="hidden" name="userId" th:value="${cart.user.id}">
-                <button class="btn btn-warning">Очистить корзину</button>
+                <button class="btn btn-warning">
+                    <i class="fas fa-broom me-1"></i> Очистить корзину
+                </button>
             </form>
-
-            <div>
-                <strong>Итоговая сумма: </strong>
-                <span th:text="${#numbers.formatDecimal(totalPrice, 0, 1)}"></span>
-            </div>
 
             <form th:action="@{/orders/create}" method="post">
                 <input type="hidden" name="userId" th:value="${cart.user.id}">
-                <button class="btn btn-success">Оформить заказ</button>
+                <button class="btn btn-success">
+                    <i class="fas fa-check-circle me-1"></i> Оформить заказ
+                </button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

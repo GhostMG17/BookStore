@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 @Entity
 @Table(name = "books")

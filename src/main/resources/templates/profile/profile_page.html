@@ -481,9 +481,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="available_books"><i class="fas fa-book me-1"></i> Каталог</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="my_books"><i class="fas fa-bookmark me-1"></i> Мои книги</a>
+                <li>
+                    <a class="nav-link" href="/cart">
+                        <i class="fas fa-shopping-cart me-2"></i> Корзина
+                        <span class="badge bg-primary ms-1" th:text="${cartItemCount}">0</span>
+                    </a>
                 </li>
+
+                <li>
+                    <a class="nav-link" th:href="@{/orders/history}">
+                        <i class="fas fa-history me-1"></i> Мои заказы
+                    </a>
+                </li>
+
 
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link" href="/admin/dashboard">
@@ -509,13 +519,14 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-user me-2"></i> Профиль
-                            </a>
-                        </li>
-                        <li>
                             <a class="dropdown-item" href="my_books">
                                 <i class="fas fa-bookmark me-2"></i> Мои книги
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="/chat-page">
+                                <i class="fas fa-comments me-2"></i> Чат с поддержкой
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
@@ -622,7 +633,7 @@
                             <div class="col-md-6">
                                 <div class="info-group">
                                     <div class="info-label">Дата регистрации</div>
-                                    <div class="info-value">15 марта 2023</div>
+                                    <div class="info-value"><span th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy')}"></td> ></span></div>
                                 </div>
                             </div>
                         </div>
