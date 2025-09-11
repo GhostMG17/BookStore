@@ -37,6 +37,7 @@ public class OrderController {
     @PostMapping("/orders/create")
     public String createOrder(@RequestParam Long userId) {
         Order order = orderService.createOrder(userId);
+
         return "redirect:/orders/history?userId=" + userId;
     }
 

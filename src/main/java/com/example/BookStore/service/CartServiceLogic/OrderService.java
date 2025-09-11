@@ -5,4 +5,5 @@ import com.example.BookStore.entity.cart.Order;
 
 public interface OrderService {
     Order createOrder(Long userId);
+    void updateOrderStatus(Order order, Order.OrderStatus status);
 }

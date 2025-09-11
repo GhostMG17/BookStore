@@ -32,13 +32,12 @@ public class Order {
 
 
     public enum OrderStatus {
-        NEW,       // Новый заказ
-        PAID,       // Оплачен
+        NEW,
+        PAID,
         PROCESSING,
-        COMPLETED,
-        SHIPPED,   // Отправлен
-        DELIVERED, // Доставлен
-        CANCELLED  // Отменён
+        SHIPPED,
+        DELIVERED,
+        CANCELLED
     }
 
     public Long getId() {

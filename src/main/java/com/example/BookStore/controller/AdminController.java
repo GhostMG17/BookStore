@@ -8,6 +8,7 @@ import com.example.BookStore.entity.user.User;
 import com.example.BookStore.repository.CartLogicRepository.OrderRepository;
 import com.example.BookStore.repository.UserRepository;
 import com.example.BookStore.service.BookService;
+import com.example.BookStore.service.CartServiceLogic.OrderService;
 import com.example.BookStore.service.CategoryService;
 import com.example.BookStore.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -31,17 +32,21 @@ public class AdminController {
     private final CategoryService categoryService;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final OrderService orderService;
+
 
     public AdminController(BookService bookService,
                            UserService userService,
                            CategoryService categoryService,
                            OrderRepository orderRepository,
-                           UserRepository userRepository) {
+                           UserRepository userRepository,
+                           OrderService orderService) {
         this.bookService = bookService;
         this.userService = userService;
         this.categoryService = categoryService;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.orderService = orderService;
     }
 
     @GetMapping("/dashboard")
@@ -234,15 +239,28 @@ public class AdminController {
     }
 
 
+//    @PostMapping("/{id}/status")
+//    public String updateStatus(@PathVariable Long id,
+//                               @RequestParam("status") Order.OrderStatus status) {
+//        Order order = orderRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Order not found"));
+//        order.setStatus(status);
+//        orderRepository.save(order);
+//
+//        return "redirect:/admin/orders";
+//    }
+
     @PostMapping("/{id}/status")
     public String updateStatus(@PathVariable Long id,
                                @RequestParam("status") Order.OrderStatus status) {
+        // Получаем заказ
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-        order.setStatus(status);
-        orderRepository.save(order);
 
+        // Используем сервис, чтобы обновить статус и отправить уведомление
+        orderService.updateOrderStatus(order, status);
         return "redirect:/admin/orders";
     }
+
 
 }

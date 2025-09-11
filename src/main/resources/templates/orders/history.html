@@ -214,6 +214,31 @@
             color: var(--secondary);
             margin-bottom: 1.5rem;
         }
+
+        /* Стили для подсказки статусов */
+        #status-tooltip {
+            position: absolute;
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            max-width: 250px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .badge {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -305,6 +330,69 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Функция для показа подсказки при наведении на статус
+    document.addEventListener('DOMContentLoaded', function() {
+        // Создаем элемент для подсказки
+        const tooltip = document.createElement('div');
+        tooltip.id = 'status-tooltip';
+        tooltip.style.position = 'absolute';
+        tooltip.style.background = 'rgba(44, 62, 80, 0.95)';
+        tooltip.style.color = 'white';
+        tooltip.style.padding = '8px 12px';
+        tooltip.style.borderRadius = '4px';
+        tooltip.style.fontSize = '14px';
+        tooltip.style.zIndex = '1000';
+        tooltip.style.maxWidth = '250px';
+        tooltip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        tooltip.style.pointerEvents = 'none';
+        tooltip.style.opacity = '0';
+        tooltip.style.transition = 'opacity 0.2s ease';
+        document.body.appendChild(tooltip);
+
+        // Описания статусов
+        const statusDescriptions = {
+            'NEW': 'Заказ создан и ожидает обработки',
+            'PAID': 'Заказ подтвержден и оплачен',
+            'PROCESSING': 'Заказ готовится к отправке',
+            'SHIPPED': 'Заказ передан в службу доставки',
+            'DELIVERED': 'Заказ получен покупателем',
+            'CANCELLED': 'Заказ отменен'
+        };
+
+        // Добавляем обработчики для всех элементов статуса
+        const statusBadges = document.querySelectorAll('.badge');
+
+        statusBadges.forEach(badge => {
+            badge.style.cursor = 'pointer';
+
+            badge.addEventListener('mouseenter', function(e) {
+                const status = this.className.match(/bg-(NEW|PAID|PROCESSING|COMPLETED|SHIPPED|DELIVERED|CANCELLED)/);
+                if (status && status[1]) {
+                    const statusType = status[1];
+                    tooltip.textContent = statusDescriptions[statusType];
+
+                    const rect = this.getBoundingClientRect();
+                    tooltip.style.left = (rect.left + window.scrollX) + 'px';
+                    tooltip.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+
+                    tooltip.style.opacity = '1';
+                }
+            });
+
+            badge.addEventListener('mouseleave', function() {
+                tooltip.style.opacity = '0';
+            });
+
+            badge.addEventListener('mousemove', function(e) {
+                // Подсказка следует за курсором
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY + 15) + 'px';
+            });
+        });
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
