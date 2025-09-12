@@ -15,10 +15,13 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String author;
     private double price;
     private int year;
     private String filePath;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -60,13 +63,21 @@ public class Book {
     }
 
 
-    public Book(Long id, String title, String author, double price, int year, String filePath) {
+    public Book(Long id, String title, double price, int year, String filePath,Author author) {
         this.id = id;
         this.title = title;
-        this.author = author;
         this.price = price;
         this.year = year;
         this.filePath = filePath;
+        this.author = author;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public Book() {}
@@ -121,14 +132,6 @@ public class Book {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public double getPrice() {

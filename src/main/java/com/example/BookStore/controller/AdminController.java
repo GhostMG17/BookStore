@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -239,17 +238,6 @@ public class AdminController {
     }
 
 
-//    @PostMapping("/{id}/status")
-//    public String updateStatus(@PathVariable Long id,
-//                               @RequestParam("status") Order.OrderStatus status) {
-//        Order order = orderRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Order not found"));
-//        order.setStatus(status);
-//        orderRepository.save(order);
-//
-//        return "redirect:/admin/orders";
-//    }
-
     @PostMapping("/{id}/status")
     public String updateStatus(@PathVariable Long id,
                                @RequestParam("status") Order.OrderStatus status) {
@@ -261,6 +249,5 @@ public class AdminController {
         orderService.updateOrderStatus(order, status);
         return "redirect:/admin/orders";
     }
-
 
 }

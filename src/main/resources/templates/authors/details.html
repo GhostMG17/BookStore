@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${author.name} + ' | NEW BOOK STORE'">Автор</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #95a5a6;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin-top: 10px;
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--dark);
+            color: var(--dark);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .author-photo {
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .book-list {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+
+        .book-item {
+            border: none;
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .book-item:last-child {
+            border-bottom: none;
+        }
+
+        .book-item:hover {
+            background-color: rgba(236, 240, 241, 0.5);
+        }
+
+        .book-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .book-link:hover {
+            color: var(--accent);
+        }
+
+        .book-price {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .biography {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .empty-books {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-book me-2"></i>NEW BOOK STORE
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a href="/authors" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-1"></i> Назад к авторам
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="mb-4">
+                <img th:if="${author.photoPath}" th:src="@{${author.photoPath}}" class="author-photo" alt="Фото автора">
+                <div th:unless="${author.photoPath}" class="author-photo bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <i class="fas fa-user fa-5x text-secondary"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h1 class="section-title" th:text="${author.name}">Имя автора</h1>
+
+            <div class="biography mb-4">
+                <h3><i class="fas fa-book-open me-2"></i>Биография</h3>
+                <p th:text="${author.biography != null && !author.biography.isEmpty()} ? ${author.biography} : 'Биография автора пока не добавлена.'"
+                   class="mt-3">Биография</p>
+            </div>
+
+            <div class="book-list">
+                <h3><i class="fas fa-books me-2"></i>Книги автора</h3>
+
+                <div th:if="${author.books != null && !author.books.isEmpty()}">
+                    <div class="list-group mt-3">
+                        <div class="list-group-item book-item" th:each="book : ${author.books}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a th:href="@{/books/{id}(id=${book.id})}" class="book-link" th:text="${book.title}">Название книги</a>
+                                <span class="book-price" th:text="${@priceUtil.format(book.price)}">Цена</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${author.books == null || author.books.isEmpty()}" class="empty-books">
+                    <i class="fas fa-book fa-3x mb-3"></i>
+                    <p>У этого автора пока нет книг в каталоге</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

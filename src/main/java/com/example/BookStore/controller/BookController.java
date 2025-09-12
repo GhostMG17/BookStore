@@ -102,7 +102,7 @@ public class BookController {
                         && b.getYear() == book.getYear());
 
         if (!alreadyAdded) {
-            MyBookList myBookList = new MyBookList(book.getTitle(), book.getAuthor(), book.getPrice(), book.getYear());
+            MyBookList myBookList = new MyBookList(book.getTitle(), book.getAuthor().getName(), book.getPrice(), book.getYear());
             myBookListService.saveMyBooks(myBookList);
 
             user.getMyBooks().add(myBookList);

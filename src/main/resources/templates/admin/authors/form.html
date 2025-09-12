@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${category.id == null} ? 'Добавление категории' : 'Редактирование категории'"> | NEW BOOK STORE</title>
+    <title th:text="${author.id} != null ? 'Редактировать автора' : 'Создать автора'"> | NEW BOOK STORE</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
@@ -62,8 +62,14 @@
             border-color: var(--dark);
         }
 
-        .btn-success {
-            background-color: #28a745;
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--dark);
             border: none;
             border-radius: 30px;
             padding: 10px 20px;
@@ -71,8 +77,8 @@
             transition: all 0.3s;
         }
 
-        .btn-success:hover {
-            background-color: #218838;
+        .btn-primary:hover {
+            background-color: var(--accent);
             transform: translateY(-2px);
         }
 
@@ -90,10 +96,18 @@
             transform: translateY(-2px);
         }
 
-        .form-label {
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
+        .photo-preview {
+            max-width: 200px;
+            border-radius: 8px;
+            border: 2px solid #eee;
+            margin-top: 10px;
+        }
+
+        .file-input {
+            padding: 8px;
+            border: 1px dashed #ddd;
+            border-radius: 8px;
+            background-color: #f8f9fa;
         }
 
         .navbar {
@@ -143,8 +157,8 @@
             <i class="fas fa-book me-2"></i>NEW BOOK STORE
         </a>
         <div class="navbar-nav ms-auto">
-            <a class="nav-link" href="/categories">
-                <i class="fas fa-arrow-left me-1"></i> Назад к категориям
+            <a class="nav-link" href="/admin/authors">
+                <i class="fas fa-arrow-left me-1"></i> Назад к авторам
             </a>
         </div>
     </div>
@@ -152,31 +166,57 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="mb-0" th:text="${category.id == null} ? 'Добавление категории' : 'Редактирование категории'"></h2>
+                    <h2 class="mb-0" th:text="${author.id} != null ? 'Редактировать автора' : 'Создать автора'"></h2>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/categories}" th:object="${category}" method="post">
+                    <form th:action="@{${author.id} != null ? '/admin/authors/edit/' + ${author.id} : '/admin/authors/create'}"
+                          th:object="${author}"
+                          method="post"
+                          enctype="multipart/form-data">
+
                         <input type="hidden" th:field="*{id}" />
 
                         <div class="mb-4">
-                            <label class="form-label">Название категории</label>
+                            <label class="form-label">Имя автора *</label>
                             <input type="text" th:field="*{name}" class="form-control" required
-                                   placeholder="Введите название категории" />
-                            <div class="form-text">Название должно быть уникальным и описательным</div>
+                                   placeholder="Введите полное имя автора"/>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Биография</label>
+                            <textarea th:field="*{biography}" class="form-control" rows="5"
+                                      placeholder="Расскажите о биографии автора..."></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Дата рождения</label>
+                            <input type="date" th:field="*{birthDate}" class="form-control"/>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Фотография автора</label>
+                            <input type="file" name="photoFile" class="form-control file-input"
+                                   accept="image/*"/>
+                            <div class="form-text">Поддерживаемые форматы: JPG, PNG, GIF</div>
+
+                            <!-- Превью текущего фото -->
+                            <div th:if="${author.photoPath != null}" class="mt-3">
+                                <p class="form-label">Текущее фото:</p>
+                                <img th:src="@{${author.photoPath}}" alt="Фото автора"
+                                     class="photo-preview"/>
+                                <div class="form-text">Для изменения загрузите новое фото</div>
+                            </div>
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn flex-fill"
-                                    style="background-color: var(--dark); color: white; border: none; border-radius: 30px; padding: 10px 20px; font-weight: 600; transition: all 0.3s;"
-                                    onmouseover="this.style.backgroundColor='var(--accent)'; this.style.transform='translateY(-2px)';"
-                                    onmouseout="this.style.backgroundColor='var(--dark)'; this.style.transform='translateY(0)';">
+                            <button type="submit" class="btn btn-primary flex-fill">
                                 <i class="fas fa-save me-1"></i>
-                                <span th:text="${category.id == null} ? 'Добавить' : 'Сохранить'"></span>
+                                <span th:text="${author.id} != null ? 'Сохранить изменения' : 'Создать автора'"></span>
                             </button>
-                            <a href="/categories" class="btn btn-secondary">
+                            <a th:href="@{/admin/authors}" class="btn btn-secondary">
                                 <i class="fas fa-times me-1"></i> Отмена
                             </a>
                         </div>

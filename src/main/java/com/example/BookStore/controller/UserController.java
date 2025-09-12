@@ -47,7 +47,6 @@ public class UserController {
                 .map(MyBookList::getTitle)
                 .toList();
 
-        // Если null → подставляем пустой список
         model.addAttribute("myBookTitles", myBookTitles != null ? myBookTitles : List.of());
 
         return "available_books";

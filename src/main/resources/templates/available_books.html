@@ -260,7 +260,7 @@
                     <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/available_books"><i class="fas fa-book me-1"></i> Каталог</a>
+                    <a class="nav-link" href="/authors"><i class="fas fa-user me-1"></i> Авторы</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/my_books"><i class="fas fa-bookmark me-1"></i> Мои книги</a>
@@ -299,10 +299,11 @@
                 </tr>
                 </thead>
                 <tbody>
+
                 <tr th:each="book : ${books}">
                     <td th:text="${book.id}"></td>
                     <td th:text="${book.title}"></td>
-                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.author.getName()}"></td>
                     <td th:text="${@priceUtil.format(book.price)}"></td>
                     <td th:text="${book.year}"></td>
                     <td th:text="${book.category?.name}">—</td>
